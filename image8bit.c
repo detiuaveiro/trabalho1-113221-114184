@@ -163,10 +163,23 @@ void ImageInit(void) { ///
 /// (The caller is responsible for destroying the returned image!)
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageCreate(int width, int height, uint8 maxval) { ///
-  assert (width >= 0);
-  assert (height >= 0);
-  assert (0 < maxval && maxval <= PixMax);
-  // Insert your code here!
+    assert(width >= 0);
+    assert(height >= 0);
+    assert(0 < maxval && maxval <= PixMax);
+
+    // Allocate image structure
+    Image img = (Image)malloc(sizeof(struct image));
+    if (img == NULL) {
+        errCause = "Out of memory";
+        return NULL;
+    }
+
+    // Initialize fields
+    img->width = width;
+    img->height = height;
+    img->maxval = maxval;
+
+    return img;
 }
 
 /// Destroy the image pointed to by (*imgp).
