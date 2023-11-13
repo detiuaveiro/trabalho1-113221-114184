@@ -173,7 +173,15 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
         errCause = "Out of memory";
         return NULL;
     }
-
+    
+    // Allocate memory for pixel data
+    img->pixel = (uint8*)malloc(width * height * sizeof(uint8));
+    if (img->pixel == NULL) {
+        free(img);
+        errCause = "Out of memory";
+        return NULL;
+    }
+    
     // Initialize fields
     img->width = width;
     img->height = height;
@@ -190,6 +198,14 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 void ImageDestroy(Image *imgp) { ///
     assert(imgp != NULL);
     // Insert your code here!
+
+    // Cleanup
+    if (*imgp != NULL) {
+        free((*imgp)->pixel);
+        (*imgp)->pixel = NULL;
+        free(*imgp);
+        *imgp = NULL;
+    }
 }
 
 /// PGM file operations
