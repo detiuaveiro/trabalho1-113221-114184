@@ -321,8 +321,9 @@ int ImageMaxval(Image img) { ///
 /// *max is set to the maximum.
 void ImageStats(Image img, uint8 *min, uint8 *max) { ///
     assert(img != NULL);
+    assert(min != NULL);
+    assert(max != NULL);
 
-    // Insert your code here!
     *min = PixMax;
     *max = 0;
     for (int x = 0; x < img->width; x++) {
