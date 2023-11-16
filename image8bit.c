@@ -348,7 +348,6 @@ int ImageValidPos(Image img, int x, int y) { ///
 /// Check if rectangular area (x,y,w,h) is completely inside img.
 int ImageValidRect(Image img, int x, int y, int w, int h) { ///
     assert(img != NULL);
-    // Insert your code here!
     return x >= 0 && y >= 0 && x + w <= img->width && y + h <= img->height;
 }
 
@@ -529,7 +528,18 @@ Image ImageMirror(Image img) { ///
 Image ImageCrop(Image img, int x, int y, int w, int h) { ///
     assert(img != NULL);
     assert(ImageValidRect(img, x, y, w, h));
-    // Insert your code here!
+    Image img_new = ImageCreate(w, h, 255);
+    if (img_new == NULL) {
+        return NULL;
+    }
+    for (int col = 0; col < w; col++) {
+        for (int row = 0; row < h; row++) {
+            int original_index = G(img, x + col, y + row);
+            int new_index = row * w + col;
+            img_new->pixel[new_index] = img->pixel[original_index];
+        }
+    }
+    return img_new;
 }
 
 /// Operations on two images
@@ -542,7 +552,13 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
     assert(img1 != NULL);
     assert(img2 != NULL);
     assert(ImageValidRect(img1, x, y, img2->width, img2->height));
-    // Insert your code here!
+    for (int col = 0; col < img2->width; col++) {
+        for (int row = 0; row < img2->height; row++) {
+            int img1_index = G(img1, x + col, y + row);
+            int img2_index = G(img2, col, row);
+            img1->pixel[img1_index] = img2->pixel[img2_index];
+        }
+    }
 }
 
 /// Blend an image into a larger image.
@@ -555,7 +571,14 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
     assert(img1 != NULL);
     assert(img2 != NULL);
     assert(ImageValidRect(img1, x, y, img2->width, img2->height));
-    // Insert your code here!
+    for (int col = 0; col < img2->width; col++) {
+        for (int row = 0; row < img2->height; row++) {
+            int img1_index = G(img1, x + col, y + row);
+            int img2_index = G(img2, col, row);
+            img1->pixel[img1_index] = (uint8)(img2->pixel[img2_index] * alpha +
+                                       img1->pixel[img1_index] * (1 - alpha) + 0.5);
+        }
+    }
 }
 
 /// Compare an image to a subimage of a larger image.
