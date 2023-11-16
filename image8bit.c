@@ -363,8 +363,7 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 // The returned index must satisfy (0 <= index < img->width*img->height)
 static inline int G(Image img, int x, int y) {
     assert(img != NULL);
-    assert(0 <= x && x < img->width);
-    assert(0 <= y && y < img->height);
+    assert(ImageValidPos(img, x, y));
     int index = y * img->width + x;
     assert(0 <= index && index < img->width * img->height);
     return index;
@@ -534,9 +533,8 @@ Image ImageCrop(Image img, int x, int y, int w, int h) { ///
     }
     for (int col = 0; col < w; col++) {
         for (int row = 0; row < h; row++) {
-            int original_index = G(img, x + col, y + row);
-            int new_index = row * w + col;
-            img_new->pixel[new_index] = img->pixel[original_index];
+            ImageSetPixel(img_new, col, row,
+                          ImageGetPixel(img, x + col, y + row));
         }
     }
     return img_new;
@@ -554,9 +552,8 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
     assert(ImageValidRect(img1, x, y, img2->width, img2->height));
     for (int col = 0; col < img2->width; col++) {
         for (int row = 0; row < img2->height; row++) {
-            int img1_index = G(img1, x + col, y + row);
-            int img2_index = G(img2, col, row);
-            img1->pixel[img1_index] = img2->pixel[img2_index];
+            ImageSetPixel(img1, x + col, y + row,
+                          ImageGetPixel(img2, col, row));
         }
     }
 }
@@ -573,10 +570,10 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
     assert(ImageValidRect(img1, x, y, img2->width, img2->height));
     for (int col = 0; col < img2->width; col++) {
         for (int row = 0; row < img2->height; row++) {
-            int img1_index = G(img1, x + col, y + row);
-            int img2_index = G(img2, col, row);
-            img1->pixel[img1_index] = (uint8)(img2->pixel[img2_index] * alpha +
-                                       img1->pixel[img1_index] * (1 - alpha) + 0.5);
+            ImageSetPixel(img1, x + col, y + row,
+                (uint8)(ImageGetPixel(img2, col, row) * alpha +
+                        ImageGetPixel(img1, x + col, y + row) * (1 - alpha) +
+                        0.5));
         }
     }
 }
