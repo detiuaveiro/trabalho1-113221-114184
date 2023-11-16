@@ -453,7 +453,22 @@ void ImageBrighten(Image img, double factor) { ///
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageRotate(Image img) { ///
     assert(img != NULL);
-    // Insert your code here!
+
+    Image img_new = malloc(sizeof(struct image));
+
+    img_new->width = img->height;
+    img_new->height = img->width;
+    img_new->maxval = img->maxval;
+
+    img_new->pixel = malloc(img_new->width * img_new->height * sizeof(uint8));
+
+    for (int y = 0; y < img_new->height; y++) {
+        for (int x = 0; x < img_new->width; x++) {
+            img_new->pixel[y * img_new->width + x] = img->pixel[(img->height - x - 1) * img->width + y];
+        }
+    }
+    
+    return img_new;
 }
 
 /// Mirror an image = flip left-right.
@@ -465,7 +480,22 @@ Image ImageRotate(Image img) { ///
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageMirror(Image img) { ///
     assert(img != NULL);
-    // Insert your code here!
+
+    Image img_new = malloc(sizeof(struct image));
+
+    img_new->width = img->width;
+    img_new->height = img->height;
+    img_new->maxval = img->maxval;
+
+    img_new->pixel = malloc(img_new->width * img_new->height * sizeof(uint8));
+
+    for (int y = 0; y < img_new->height; y++) {
+        for (int x = 0; x < img_new->width; x++) {
+            img_new->pixel[y * img->width + x] = img->pixel[y * img->width + (img->width - x - 1)];
+        }
+    }
+    
+    return img_new;
 }
 
 /// Crop a rectangular subimage from img.
