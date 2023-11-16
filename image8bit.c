@@ -455,12 +455,19 @@ Image ImageRotate(Image img) { ///
     assert(img != NULL);
 
     Image img_new = malloc(sizeof(struct image));
+    if (img_new == NULL) {
+        return NULL;
+    }
 
     img_new->width = img->height;
     img_new->height = img->width;
     img_new->maxval = img->maxval;
 
     img_new->pixel = malloc(img_new->width * img_new->height * sizeof(uint8));
+    if (img_new->pixel == NULL) {
+        free(img_new);
+        return NULL;
+    }
 
     for (int y = 0; y < img_new->height; y++) {
         for (int x = 0; x < img_new->width; x++) {
@@ -482,12 +489,18 @@ Image ImageMirror(Image img) { ///
     assert(img != NULL);
 
     Image img_new = malloc(sizeof(struct image));
-
+    if (img_new == NULL) {
+        return NULL;
+    }
     img_new->width = img->width;
     img_new->height = img->height;
     img_new->maxval = img->maxval;
 
     img_new->pixel = malloc(img_new->width * img_new->height * sizeof(uint8));
+    if (img_new->pixel == NULL) {
+        free(img_new);
+        return NULL;
+    }
 
     for (int y = 0; y < img_new->height; y++) {
         for (int x = 0; x < img_new->width; x++) {
