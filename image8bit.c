@@ -173,15 +173,15 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
         errCause = "Out of memory";
         return NULL;
     }
-    
+
     // Allocate memory for pixel data
-    img->pixel = (uint8*)malloc(width * height * sizeof(uint8));
+    img->pixel = (uint8 *)malloc(width * height * sizeof(uint8));
     if (img->pixel == NULL) {
         free(img);
         errCause = "Out of memory";
         return NULL;
     }
-    
+
     // Initialize fields
     img->width = width;
     img->height = height;
@@ -425,7 +425,7 @@ void ImageBrighten(Image img, double factor) { ///
     assert(img != NULL);
     assert(factor >= 0.0);
     for (int i = 0; i < img->width * img->height; i++) {
-        int new_value = round(img->pixel[i] * factor);
+        uint8 new_value = (uint8)(img->pixel[i] * factor + 0.5);
         img->pixel[i] = new_value > img->maxval ? img->maxval : new_value;
     }
 }
@@ -471,10 +471,11 @@ Image ImageRotate(Image img) { ///
 
     for (int y = 0; y < img_new->height; y++) {
         for (int x = 0; x < img_new->width; x++) {
-            img_new->pixel[y * img_new->width + x] = img->pixel[(img->height - x - 1) * img->width + y];
+            img_new->pixel[y * img_new->width + x] =
+                img->pixel[(img->height - x - 1) * img->width + y];
         }
     }
-    
+
     return img_new;
 }
 
@@ -504,10 +505,11 @@ Image ImageMirror(Image img) { ///
 
     for (int y = 0; y < img_new->height; y++) {
         for (int x = 0; x < img_new->width; x++) {
-            img_new->pixel[y * img->width + x] = img->pixel[y * img->width + (img->width - x - 1)];
+            img_new->pixel[y * img->width + x] =
+                img->pixel[y * img->width + (img->width - x - 1)];
         }
     }
-    
+
     return img_new;
 }
 
@@ -583,9 +585,4 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2) { ///
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) { ///
                                             // Insert your code here!
-}
-
-int round(double number){
-    int round_number = (int)(number + 0.5);
-    return round_number;
 }
