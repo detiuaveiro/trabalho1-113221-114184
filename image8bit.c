@@ -600,10 +600,49 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2) { ///
 
 /// Filtering
 
+Image ImageCopy(Image img) {
+    Image new_img = ImageCreate(img->width, img->height, img->maxval);
+
+    for (int x = 0; x < img->width; x++) {
+        for (int y = 0; y < img->height; y++) {
+            ImageSetPixel(new_img, x, y, ImageGetPixel(img, x, y));
+        }
+    }
+
+    return new_img;
+}
+
 /// Blur an image by a applying a (2dx+1)x(2dy+1) mean filter.
 /// Each pixel is substituted by the mean of the pixels in the rectangle
 /// [x-dx, x+dx]x[y-dy, y+dy].
 /// The image is changed in-place.
-void ImageBlur(Image img, int dx, int dy) { ///
-                                            // Insert your code here!
+void ImageBlur(Image img, int dx, int dy) {
+    assert(img != NULL);
+    assert(dx >= 0 && dy >= 0);
+
+    Image img_copy = ImageCopy(img);
+    if (img_copy == NULL) {
+        return;
+    }
+
+    for (int x = 0; x < img->width; x++) {
+        for (int y = 0; y < img->height; y++) {
+            int sum = 0;
+            int count = 0;
+            for (int idx = -dx; idx <= dx; idx++) {
+                for (int idy = -dy; idy <= dy; idy++) {
+                    int rx = x + idx;
+                    int ry = y + idy;
+                    if (rx < 0 || rx >= img->width || ry < 0 || ry >= img->height) {
+                        continue;
+                    }
+                    sum += ImageGetPixel(img_copy, rx, ry);
+                    count++;
+                }
+            }
+            ImageSetPixel(img, x, y, (sum + count / 2) / count);
+        }
+    }
+
+    ImageDestroy(&img_copy);
 }
