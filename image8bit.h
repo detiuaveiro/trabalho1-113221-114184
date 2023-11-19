@@ -51,6 +51,16 @@ void ImageInit(void) ;
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageCreate(int width, int height, uint8 maxval) ;
 
+/// Create a new image as a copy of another image.
+///  img : the image to copy.
+///  Ensures: a new image is returned.
+/// Requires: valid image pointer.
+///
+/// On success, a new image is returned.
+/// (The caller is responsible for destroying the returned image!)
+/// On failure, returns NULL and errno/errCause are set accordingly.
+Image ImageCopy(Image img);
+
 /// Destroy the image pointed to by (*imgp).
 ///   imgp : address of an Image variable.
 /// If (*imgp)==NULL, no operation is performed.
