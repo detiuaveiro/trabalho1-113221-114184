@@ -1,0 +1,120 @@
+%! Author = TiagoRG
+%! GitHub = https://github.com/TiagoRG
+
+\documentclass{report}
+\usepackage[T1]{fontenc} % Fontes T1
+\usepackage[utf8]{inputenc} % Input UTF8
+\usepackage[backend=biber, style=ieee]{biblatex} % para usar bibliografia
+\usepackage{csquotes}
+\usepackage[portuguese]{babel} %Usar língua portuguesa
+\usepackage{blindtext} % Gerar texto automaticamente
+\usepackage[printonlyused]{acronym}
+\usepackage{hyperref} % para autoref
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{listings}
+
+\geometry{
+    paper=a4paper,
+    margin=45pt,
+    includefoot
+}
+
+\bibliography{bibliography}
+
+
+\begin{document}
+%%
+% Definições
+\input{defs/definitions}
+%
+%%%%%% CAPA %%%%%%
+%
+\begin{titlepage}
+
+\begin{center}
+%
+\vspace*{50mm}
+%
+{\Huge \titulo}\\
+%
+\vspace{10mm}
+%
+{\Large \empresa}\\
+%
+\vspace{10mm}
+%
+{\LARGE \autores}\\
+%
+\vspace{30mm}
+%
+\begin{figure}[h]
+\center
+\includegraphics{images/ua}\label{fig:ua-title-logo}
+\end{figure}
+%
+\end{center}
+\end{titlepage}
+
+%%  Página de Título %%
+\title{%
+{\Huge\textbf{\titulo}}\\
+{\Large \departamento\\ \empresa}
+}
+%
+\author{%
+    \autores \\
+    \autorescontactos
+}
+%
+\date{\today}
+%
+\maketitle
+
+%\pagenumbering{roman}
+
+%%%%%% RESUMO %%%%%%
+% \begin{abstract}
+% Resumo de 200-300 palavras.
+% \end{abstract}
+
+
+%%%%%% Agradecimentos %%%%%%
+%\renewcommand{\abstractname}{Agradecimentos}
+%\begin{abstract}
+    %Eventuais agradecimentos.
+%\end{abstract}
+
+\tableofcontents
+%\listoftables     % descomentar se necessário
+%\listoffigures    % descomentar se necessário
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\pagenumbering{arabic}
+
+
+%%%%%% INTRODUÇÃO %%%%%%
+\input{ch/introducao}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Capítulos
+
+
+%%%%%% CONCLUSÕES %%%%%%
+\input{ch/conclusao}
+
+
+%%%%%% ACRÓNIMOS %%%%%%
+%\input{defs/acronyms}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\printbibliography
+
+\end{document}
