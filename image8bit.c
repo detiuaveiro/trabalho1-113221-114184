@@ -634,36 +634,56 @@ void ImageBlur(Image img, int dx, int dy) {
     // Checks if the blur is not needed
     if (dx == 0 && dy == 0) return;
 
-    // Creates a new image to store the blurred image
-    Image img_new = ImageCreate(img->width, img->height, img->maxval);
-    if (img_new == NULL) return;
-
-    // Iterates through every pixel in the original image
-    for (int x = 0; x < img->width; x++) {
-        for (int y = 0; y < img->height; y++) {
-            int sum = 0;
-            int count = 0;
-
-            // Iterates through every pixel in the rectangle around the current pixel checking if the pixel is inside the image
-            for (int ix = x - dx; ix <= x + dx; ix++) {
-                for (int iy = y - dy; iy <= y + dy; iy++) {
-                    // Skips the pixel if it is not inside the image
-                    if (!ImageValidPos(img, ix, iy)) continue;
-                    sum += ImageGetPixel(img, ix, iy);
-                    count++;
-                }
-            }
-
-            // Sets the pixel in the new image to the average of the values of the pixels in the rectangle around the current pixel
-            ImageSetPixel(img_new, x, y, (sum + count / 2) / count);
+    // Create integral image
+    // This image is represented as an array with the same size as the original image plus one row and one column to the left and above (with zeros)
+    // Each cell will be the sum of the pixels above and to the left of it in the original image
+    // This will result in the sum of the pixels in the rectangle from (0, 0) to (x, y) in the original image
+    // To calculate each cell:
+    //     sum = original_image_pixel + pixel_above_cell_in_integral + pixel_to_the_left_of_cell_in_integral - pixel_above_and_to_the_left_of_cell_in_integral
+    int integral_width = img->width + 1;
+    int integral_height = img->height + 1;
+    int* integral = (int*)calloc(integral_width * integral_height, sizeof(int));
+    for (int x = 1; x < integral_width; x++) {
+        for (int y = 1; y < integral_height; y++) {
+            integral[y * integral_width + x] = ImageGetPixel(img, x - 1, y - 1)   // Pixel in the original image
+                + integral[(y - 1) * integral_width + x]                          // Pixel above in the integral cell
+                + integral[y * integral_width + (x - 1)]                          // Pixel to the left in the integral cell
+                - integral[(y - 1) * integral_width + (x - 1)];                   // Pixel above and to the left in the integral cell
         }
     }
 
-    // Swaps the original image with the blurred image by swapping the pointers to the pixel arrays
-    uint8 *tmp = img->pixel;
-    img->pixel = img_new->pixel;
-    img_new->pixel = tmp;
+    // Blur image using integral image
+    for (int x = 0; x < img->width; x++) {
+        for (int y = 0; y < img->height; y++) {
+            // Top-left corner of the rectangle
+            // If the rectangle goes outside the bounds of the image, the respective coordinate is set to 0
+            // We need to consider the extra row and column in the integral image therefore considering the lower bound as 1
+            int x1 = x - dx < 1 ? 1 : x - dx;
+            int y1 = y - dy < 1 ? 1 : y - dy;
 
-    // Destroys the blurred image (now contains the original image pixels)
-    ImageDestroy(&img_new);
+            // Bottom-right corner of the rectangle
+            // If the rectangle goes outside the bounds of the image, the respective coordinate is set to the last pixel in the image
+            // We need to consider the extra row and column in the integral image therefore considering the upper bound as integral_width - 1 and integral_height - 1
+            // We also need to consider the lines of pixels from the bottom-right corner of the rectangle (bottom and right edges),
+            // which is not considered by default since the pixel itself takes an index and therefore adding 1 to the coordinates
+            int x2 = x + dx + 1 > integral_width - 1 ? integral_width - 1 : x + dx + 1;
+            int y2 = y + dy + 1 > integral_height - 1 ? integral_height - 1 : y + dy + 1;
+
+            // Calculates the ammount of pixels inside the rectangle
+            int count = (x2 - x1) * (y2 - y1);
+
+            // Calculates the sum of the pixels:
+            // sum = bottom_right_corner - pixels_above_rectangle - pixels_to_the_left_of_rectangle + pixels_above_and_to_the_left_of_rectangle
+            int sum = integral[y2 * integral_width + x2]
+                - integral[y1 * integral_width + x2]
+                - integral[y2 * integral_width + x1]
+                + integral[y1 * integral_width + x1];
+
+            // Sets the pixel in the image to the sum divided by the cell count
+            ImageSetPixel(img, x, y, (sum + count / 2) / count);
+        }
+    }
+
+    // Free integral image
+    free(integral);
 }
