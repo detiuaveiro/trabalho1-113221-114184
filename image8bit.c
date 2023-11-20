@@ -603,6 +603,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
             }
         }
     }
+    return 1;
 }
 
 /// Locate a subimage inside another image.
@@ -621,6 +622,7 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2) { ///
             }
         }
     }
+    return 0;
 }
 
 
