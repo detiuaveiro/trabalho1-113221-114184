@@ -190,29 +190,6 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
     return img;
 }
 
-
-/// Create a new image as a copy of another image.
-///  img : the image to copy.
-///  Ensures: a new image is returned.
-/// Requires: valid image pointer.
-///
-/// On success, a new image is returned.
-/// (The caller is responsible for destroying the returned image!)
-/// On failure, returns NULL and errno/errCause are set accordingly.
-Image ImageCopy(Image img) {
-    Image new_img = ImageCreate(img->width, img->height, img->maxval);
-
-    if (new_img == NULL) {
-        return NULL;
-    }
-
-    for (int i = 0; i < img->width * img->height; i++) {
-        new_img->pixel[i] = img->pixel[i];
-    }
-
-    return new_img;
-}
-
 /// Destroy the image pointed to by (*imgp).
 ///   imgp : address of an Image variable.
 /// If (*imgp)==NULL, no operation is performed.
@@ -593,6 +570,7 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
 int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
     assert(img1 != NULL);
     assert(img2 != NULL);
+
     assert(ImageValidPos(img1, x, y));
 
     if (!ImageValidRect(img1, x, y, img2->width, img2->height)) {
@@ -624,8 +602,8 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2) { ///
         return 0;
     }
 
-    for (int col = 0; col <= img2->width; col++) {
-        for (int row = 0; row <= img2->height; row++) {
+    for (int col = 0; col < img1->width; col++) {
+        for (int row = 0; row < img1->height; row++) {
             if (ImageMatchSubImage(img1, col, row, img2)) {
                 *px = col;
                 *py = row;
@@ -637,9 +615,6 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2) { ///
     return 0;
 }
 
-
-
-
 /// Filtering
 
 /// Blur an image by a applying a (2dx+1)x(2dy+1) mean filter.
@@ -650,23 +625,38 @@ void ImageBlur(Image img, int dx, int dy) {
     assert(img != NULL);
     assert(dx >= 0 && dy >= 0);
 
-    Image img_copy = ImageCopy(img);
-    if (img_copy == NULL) return;
+    if (dx == 0 && dy == 0) return;
+
+    Image img_new = ImageCreate(img->width, img->height, img->maxval);
+    if (img_new == NULL) return;
 
     for (int x = 0; x < img->width; x++) {
         for (int y = 0; y < img->height; y++) {
             int sum = 0;
             int count = 0;
-            for (int ix = x - dx; ix <= x + dx; ix++) {
-                for (int iy = y - dy; iy <= y + dy; iy++) {
-                    if (!ImageValidPos(img, ix, iy)) continue;
-                    sum += ImageGetPixel(img_copy, ix, iy);
-                    count++;
+            if (ImageValidRect(img, x - dx, y - dy, x + dx, y + dy)) {
+                for (int ix = x - dx; ix <= x + dx; ix++) {
+                    for (int iy = y - dy; iy <= y + dy; iy++) {
+                        sum += ImageGetPixel(img, ix, iy);
+                        count++;
+                    }
                 }
             }
-            ImageSetPixel(img, x, y, (sum + count / 2) / count);
+            else {
+                for (int ix = x - dx; ix <= x + dx; ix++) {
+                    for (int iy = y - dy; iy <= y + dy; iy++) {
+                        if (!ImageValidPos(img, ix, iy)) continue;
+                        sum += ImageGetPixel(img, ix, iy);
+                        count++;
+                    }
+                }
+            }
+            ImageSetPixel(img_new, x, y, (sum + count / 2) / count);
         }
     }
 
-    ImageDestroy(&img_copy);
+    uint8 *tmp = img->pixel;
+    img->pixel = img_new->pixel;
+    img_new->pixel = tmp;
+    ImageDestroy(&img_new);
 }
