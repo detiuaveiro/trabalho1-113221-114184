@@ -478,25 +478,15 @@ void ImageBrighten(Image img, double factor) { ///
 Image ImageRotate(Image img) { ///
     assert(img != NULL);
 
-    Image img_new = malloc(sizeof(struct image));
+    Image img_new = ImageCreate(img->height, img->width, img->maxval);
     if (img_new == NULL) {
         return NULL;
     }
 
-    img_new->width = img->height;
-    img_new->height = img->width;
-    img_new->maxval = img->maxval;
-
-    img_new->pixel = malloc(img_new->width * img_new->height * sizeof(uint8));
-    if (img_new->pixel == NULL) {
-        free(img_new);
-        return NULL;
-    }
-
-    for (int y = 0; y < img_new->height; y++) {
-        for (int x = 0; x < img_new->width; x++) {
-            img_new->pixel[y * img_new->width + x] =
-                img->pixel[(img->height - x - 1) * img->width + y];
+    for (int x = 0; x < img_new->width; x++) {
+        for (int y = 0; y < img_new->height; y++) {
+            ImageSetPixel(img_new, x, y,
+                          ImageGetPixel(img, img->width - y - 1, x));
         }
     }
 
@@ -513,24 +503,15 @@ Image ImageRotate(Image img) { ///
 Image ImageMirror(Image img) { ///
     assert(img != NULL);
 
-    Image img_new = malloc(sizeof(struct image));
+    Image img_new = ImageCreate(img->width, img->height, img->maxval);
     if (img_new == NULL) {
         return NULL;
     }
-    img_new->width = img->width;
-    img_new->height = img->height;
-    img_new->maxval = img->maxval;
 
-    img_new->pixel = malloc(img_new->width * img_new->height * sizeof(uint8));
-    if (img_new->pixel == NULL) {
-        free(img_new);
-        return NULL;
-    }
-
-    for (int y = 0; y < img_new->height; y++) {
-        for (int x = 0; x < img_new->width; x++) {
-            img_new->pixel[y * img->width + x] =
-                img->pixel[y * img->width + (img->width - x - 1)];
+    for (int x = 0; x < img_new->width; x++) {
+        for (int y = 0; y < img_new->height; y++) {
+            ImageSetPixel(img_new, x, y,
+                          ImageGetPixel(img, img->width - x - 1, y));
         }
     }
 
