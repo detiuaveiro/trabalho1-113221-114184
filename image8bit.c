@@ -633,7 +633,11 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2) { ///
     assert(img2 != NULL);
     for (int col = 0; col <= img2->width; col++) {
         for (int row = 0; row <= img2->height; row++) {
-            // WIP
+            if (ImageMatchSubImage(img1, col, row, img2)) {
+                *px = col;
+                *py = row;
+                return 1;
+            }
         }
     }
 }
