@@ -331,8 +331,8 @@ void ImageStats(Image img, uint8 *min, uint8 *max) { ///
     *max = 0;
 
     // Find min and max
-    for (int x = 0; x < img->width; x++) {
-        for (int y = 0; y < img->height; y++) {
+    for (int y = 0; y < img->height; y++) {
+        for (int x = 0; x < img->width; x++) {
             uint8 pixel = ImageGetPixel(img, x, y);
             if (pixel < *min) *min = pixel;
             if (pixel > *max) *max = pixel;
@@ -461,8 +461,8 @@ Image ImageRotate(Image img) { ///
     if (img_new == NULL) return NULL;
 
     // Rotate image
-    for (int x = 0; x < img_new->width; x++) {
-        for (int y = 0; y < img_new->height; y++) {
+    for (int y = 0; y < img_new->height; y++) {
+        for (int x = 0; x < img_new->width; x++) {
             ImageSetPixel(img_new, x, y,
                           ImageGetPixel(img, img->width - y - 1, x));
         }
@@ -486,8 +486,8 @@ Image ImageMirror(Image img) { ///
     if (img_new == NULL) return NULL;
 
     // Mirror image
-    for (int x = 0; x < img_new->width; x++) {
-        for (int y = 0; y < img_new->height; y++) {
+    for (int y = 0; y < img_new->height; y++) {
+        for (int x = 0; x < img_new->width; x++) {
             ImageSetPixel(img_new, x, y,
                           ImageGetPixel(img, img->width - x - 1, y));
         }
@@ -517,8 +517,8 @@ Image ImageCrop(Image img, int x, int y, int w, int h) { ///
     if (img_new == NULL) return NULL;
 
     // Crop image
-    for (int col = 0; col < w; col++) {
-        for (int row = 0; row < h; row++) {
+    for (int row = 0; row < h; row++) {
+        for (int col = 0; col < w; col++) {
             ImageSetPixel(img_new, col, row,
                           ImageGetPixel(img, x + col, y + row));
         }
@@ -539,8 +539,8 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
     assert(ImageValidRect(img1, x, y, img2->width, img2->height));
 
     // Copies every pixel from img2 to img1 at the specified position
-    for (int col = 0; col < img2->width; col++) {
-        for (int row = 0; row < img2->height; row++) {
+    for (int row = 0; row < img2->height; row++) {
+        for (int col = 0; col < img2->width; col++) {
             ImageSetPixel(img1, x + col, y + row,
                           ImageGetPixel(img2, col, row));
         }
@@ -559,8 +559,8 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
     assert(ImageValidRect(img1, x, y, img2->width, img2->height));
 
     // Blends every pixel from img2 to img1 at the specified position with the specified alpha
-    for (int col = 0; col < img2->width; col++) {
-        for (int row = 0; row < img2->height; row++) {
+    for (int row = 0; row < img2->height; row++) {
+        for (int col = 0; col < img2->width; col++) {
             ImageSetPixel(img1, x + col, y + row,
                 (uint8)(ImageGetPixel(img2, col, row) * alpha +
                         ImageGetPixel(img1, x + col, y + row) * (1 - alpha) +
@@ -583,8 +583,8 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
     if (!ImageValidRect(img1, x, y, img2->width, img2->height)) return 0;
 
     // Checks if every pixel in the subimage matches the corresponding pixel in the image from the specified position
-    for (int col = 0; col < img2->width; col++) {
-        for (int row = 0; row < img2->height; row++) {
+    for (int row = 0; row < img2->height; row++) {
+        for (int col = 0; col < img2->width; col++) {
             // Returns 0 if a pixel doesn't match
             if (ImageGetPixel(img1, x+col, y+row) != ImageGetPixel(img2, col, row)) return 0;
         }
@@ -608,8 +608,8 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2) { ///
 
     // Searchs for the coordinates of the subimage in the image
     // Returns 1 when and if found, 0 otherwise
-    for (int col = 0; col < img1->width - img2->width; col++) {
-        for (int row = 0; row < img1->height - img2->height; row++) {
+    for (int row = 0; row < img1->height - img2->height; row++) {
+        for (int col = 0; col < img1->width - img2->width; col++) {
             if (ImageMatchSubImage(img1, col, row, img2)) {
                 *px = col;
                 *py = row;
@@ -643,8 +643,8 @@ void ImageBlur(Image img, int dx, int dy) {
     int integral_width = img->width + 1;
     int integral_height = img->height + 1;
     int* integral = (int*)calloc(integral_width * integral_height, sizeof(int));
-    for (int x = 1; x < integral_width; x++) {
-        for (int y = 1; y < integral_height; y++) {
+    for (int y = 1; y < integral_height; y++) {
+        for (int x = 1; x < integral_width; x++) {
             integral[y * integral_width + x] = ImageGetPixel(img, x - 1, y - 1)   // Pixel in the original image
                 + integral[(y - 1) * integral_width + x]                          // Pixel above in the integral cell
                 + integral[y * integral_width + (x - 1)]                          // Pixel to the left in the integral cell
@@ -653,8 +653,8 @@ void ImageBlur(Image img, int dx, int dy) {
     }
 
     // Blur image using integral image
-    for (int x = 0; x < img->width; x++) {
-        for (int y = 0; y < img->height; y++) {
+    for (int y = 0; y < img->height; y++) {
+        for (int x = 0; x < img->width; x++) {
             // Top-left corner of the rectangle
             // If the rectangle goes outside the bounds of the image, the respective coordinate is set to 0
             // We need to consider the extra row and column in the integral image therefore considering the lower bound as 1
@@ -663,8 +663,7 @@ void ImageBlur(Image img, int dx, int dy) {
 
             // Bottom-right corner of the rectangle
             // If the rectangle goes outside the bounds of the image, the respective coordinate is set to the last pixel in the image
-            // We need to consider the extra row and column in the integral image therefore considering the upper bound as integral_width - 1 and integral_height - 1
-            // We also need to consider the lines of pixels from the bottom-right corner of the rectangle (bottom and right edges),
+            // We need to consider the lines of pixels from the bottom-right corner of the rectangle (bottom and right edges),
             // which is not considered by default since the pixel itself takes an index and therefore adding 1 to the coordinates
             int x2 = x + dx + 1 > integral_width - 1 ? integral_width - 1 : x + dx + 1;
             int y2 = y + dy + 1 > integral_height - 1 ? integral_height - 1 : y + dy + 1;
