@@ -1,0 +1,76 @@
+\section{Análise formal}
+\label{sec:imageblur/formal}
+
+\subsection{Primeira abordagem}
+
+\subsubsection{Descrição do algoritmo}
+
+Este algoritmo percorre todos os pixeis da imagem original e para cada pixel calcula a média dos pixeis num retângulo de desfocagem centrado no pixel atual. Para tal, vai iterar por todos os pixeis da imagem e para cada pixel vai iterar de novo por todos os pixeis que se encontram no retângulo de dimensões $2dx+1 \times 2dy+1$, faz a soma dos valores desses pixeis, divide pelo número de pixeis desse retângulo e atribui esse resultado ao pixel central.
+
+Este algoritmo, por mais que seja simples, fica bastante ineficiente quando o retângulo de desfocagem é grande pois temos de calcular a soma de todos os pixeis do retângulo para cada pixel da imagem. Por mais que para imagens pequenas não seja uma diferença notável, à medida que os valores das variáveis aumenta, também o tempo necessário para o algoritmo aumenta imenso.
+
+O código completo deste algoritmo pode ser visto no anexo \ref{sec:anexos/blur1}.
+
+\subsubsection{Análise de complexidade}
+
+\begin{itemize}
+
+\item
+\textbf{Complexidade Temporal}
+
+\begin{enumerate}
+    \item \textbf{Desfocagem:} Esta parte da função itera sobre todas as linhas ($img$$\rightarrow$$height$) e para cada linha itera sobre todos os pixeis da linha ($img$$\rightarrow$$width$). Para cada pixel, itera sobre todas as linhas ($2 * dy + 1$) e para cada linha itera sobre todos os pixeis da linha ($2 * dx + 1$). Assim, a complexidade temporal desta parte é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$.
+\end{enumerate}
+
+        Assim, a complexidade temporal total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$ que significa que a complexidade temporal escala linearmente tanto em função da àrea da imagem quanto em função da área do retângulo de desfocagem (independentes uma da outra neste requisito).
+
+\item
+
+\textbf{Complexidade Espacial}
+
+\begin{enumerate}
+    \item \textbf{Criação da Nova Imagem:} Esta parte da função aloca memória para a nova imagem onde será guardada a imagem desfocada. Uma vez que a nova imagem tem as mesmas dimensões que a imagem original, a complexidade espacial desta parte é $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$.
+    \item \textbf{Desfocagem da Image:} Esta parte modifica a imagem criada, por isso não terá complexidade espacial associada.
+    \item \textbf{Transferência da Nova Imagem:} Esta parte da função apenas transfere o ponteiro da nova imagem para o ponteiro da imagem original, por isso não terá complexidade espacial associada.
+\end{enumerate}
+
+Assim, a complexidade espacial total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$ que significa que a complexidade espacial escala linearmente em função da área da imagem.
+
+\end{itemize}
+
+\pagebreak
+
+\subsection{Segunda abordagem}
+
+\subsubsection{Descrição do algoritmo}
+
+Este algoritmo passa por calcular as somas de todos os pixeis num retângulo entre $(0,0)$ e $(x,y)$ antes de começar a criar a imagem desfocada. Uma vez que teremos as somas todas calculadas, podemos calcular o valor de cada pixel da imagem desfocada com base nas somas calculadas anteriormente. Este algoritmo é mais eficiente que o anterior pois não temos de calcular as somas de cada pixel do retângulo de desfocagem, mas sim apenas uma vez para cada pixel da imagem original. Visto que este altoritmo é mais complexo, está explicado mais detalhadamente na secção \ref{sec:imageblur/optimal}.
+
+O código completo deste algoritmo pode ser visto no anexo \ref{sec:anexos/blur2}.
+
+\subsubsection{Análise de complexidade}
+
+\begin{itemize}
+    
+\item
+\textbf{Complexidade Temporal}
+
+\begin{enumerate}
+    \item \textbf{Criação da Imagem Integral:} Esta parte da função itera sobre todas as linhas ($img$$\rightarrow$$height$) e para cada linha itera sobre todos os pixeis da linha ($img$$\rightarrow$$width$). Assim, a complexidade temporal desta parte é $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$.
+    \item \textbf{Desfocagem da Image:} Tal como a anterior, esta parte também itera sobre todas as linhas ($img$$\rightarrow$$height$) e para cada linha itera sobre todos os pixeis da linha ($img$$\rightarrow$$width$). Uma vez que todas as operações dentro dos `for loops' têm complexidade temporal constante, a complexidade temporal desta parte é $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$.
+    \item \textbf{Limpeza da Imagem Integral:} Esta parte da função tem sempre complexidade temporal constante, por isso a complexidade temporal desta parte é $O(1)$.
+\end{enumerate}
+
+Assim, a complexidade temporal total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$ + $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$ + $O(1)$ que simplifica para $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$. Isto significa que a complexidade temporal escala linearmente em função da área da imagem, com esta abordagem, a área do retângulo de desfocagem não irá alterar a complexidade do algoritmo.
+
+\item
+\textbf{Complexidade Espacial}
+
+\begin{enumerate}
+    \item \textbf{Criação da Imagem Integral:} Esta parte aloca memória para a imagem integral que tem mais uma linha e uma coluna que a imagem original. Assim, a complexidade espacial desta parte é $O((img$$\rightarrow$$height + 1) * (img$$\rightarrow$$width + 1))$.
+    \item \textbf{Desfocagem da Image:} Esta parte modifica a imagem original, por isso não terá complexidade espacial associada.
+\end{enumerate}
+
+Assim, a complexidade espacial total da função é $O((img$$\rightarrow$$height + 1) * (img$$\rightarrow$$width + 1))$ que simplifica para $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$. Isto significa que a complexidade espacial escala linearmente em função da área da imagem.
+
+\end{itemize}

@@ -14,13 +14,34 @@
 \usepackage{graphicx}
 \usepackage{indentfirst}
 \usepackage{float}
+\usepackage{fancyhdr}
 \usepackage{geometry}
 \usepackage{listings}
 
 \geometry{
     paper=a4paper,
     margin=45pt,
+    % tmargin=70pt,
     includefoot
+}
+
+\lstset{
+    language=C, % choose the language of the code
+    basicstyle=\fontfamily{pcr}\selectfont\footnotesize\color{black},
+    keywordstyle=\color{Blue}\bfseries, % style for keywords
+    numbers=left, % where to put the line-numbers
+    numberstyle=\tiny, % the size of the fonts that are used for the line-numbers
+    backgroundcolor=\color{white},
+    showspaces=false, % show spaces adding particular underscores
+    showstringspaces=false, % underline spaces within strings
+    showtabs=false, % show tabs within strings adding particular underscores
+    frame=single, % adds a frame around the code
+    tabsize=4, % sets default tabsize to 2 spaces
+    rulesepcolor=\color{gray},
+    rulecolor=\color{black},
+    captionpos=b, % sets the caption-position to bottom
+    breaklines=false, % sets automatic line breaking
+    breakatwhitespace=false,
 }
 
 \bibliography{bibliography}
@@ -62,6 +83,7 @@
 %%  Página de Título %%
 \title{%
 {\Huge\textbf{\titulo}}\\
+\vspace*{1cm}
 {\Large \departamento\\ \empresa}
 }
 %
@@ -95,8 +117,16 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
-\pagenumbering{arabic}
 
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{
+    \fancyhf{}% Clear header/footer
+    % \fancyhead[R]{\small Universidade de Aveiro~~\includegraphics[width=20pt,height=20pt]{images/ua}}% Right header
+    % \fancyhead[L]{\small Departamento de Electrónica, Telecomunicações e Informática}% Right header
+    \fancyfoot[C]{\thepage}% Centred footer
+}
+\pagestyle{plain}% Set page style to plain.
 
 %%%%%% INTRODUÇÃO %%%%%%
 \input{ch/introducao}
@@ -118,5 +148,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \printbibliography
+
+\input{ch/anexos}
 
 \end{document}

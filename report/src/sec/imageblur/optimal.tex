@@ -1,13 +1,7 @@
 \section{Algoritmo optimizado da ImageBlur}
 \label{sec:imageblur/optimal}
 
-\subsection{Descrição do algoritmo}
-
-Este algoritmo passa por calcular as somas todas recursivamente antes de começar a criar a imagem desfocada. Uma vez que teremos as somas todas calculadas, podemos calcular o valor de cada pixel da imagem desfocada com base nas somas calculadas anteriormente. Este algoritmo é mais eficiente que o anterior pois não temos de calcular as somas de cada pixel da imagem desfocada, mas sim apenas uma vez para cada pixel da imagem original.
-
-\subsection{Implementação}
-
-\subsubsection{Imagem Integral}
+\subsection{Imagem Integral}
 
 Considerando $img$ como uma matriz $m \times n$, onde $m~=~img\rightarrow height$ e $n~=~img\rightarrow width$, vamos gerar uma matriz $m+1 \times n+1$ onde a primeira linha e a primeira coluna vão ser zeros, a partir daí, o elemento $(y,x)$ desta matriz irá corresponder ao elemento $(y-1,x-1)$ da matriz da imagem com $x\in[1,n]$ e $y\in[1,m]$. Esta nova imagem será armazenada como um array de $m+1~*~n+1$ elementos, com 32 bits cada (visto que será um array de inteiros).
 
@@ -48,7 +42,9 @@ Para calcular todas estas células da matriz, usamos as linhas de código:
     }
 \end{lstlisting}
 
-\subsubsection{Imagem desfocada}
+\pagebreak
+
+\subsection{Imagem desfocada}
 
 Uma vez que já temos a imagem integral, podemos agora calcular a imagem desfocada. Para isso, vamos percorrer a imagem integral e para cada pixel, teremos de efetuar o seguinte procedimento:
 
@@ -85,8 +81,6 @@ int y2 = y + dy + 1 > integral_height - 1 ? integral_height - 1 : y + dy + 1;
 \end{enumerate}
 }
 
-\pagebreak
-
 \item {
 \textbf{Cálculo da quantidade de pixeis}
 
@@ -96,6 +90,8 @@ Para calcular a quantidade de pixeis que estão dentro do retângulo, basta calc
     int count = (x2 - x1) * (y2 - y1);
 \end{lstlisting}
 }
+
+\pagebreak
 
 \item {
 \textbf{Cálculo da soma}
@@ -116,9 +112,9 @@ Para calcular o resultado desta expressão, usamos as linhas de código:
 
 \begin{lstlisting}[language=C]
     int sum = integral[y2 * integral_width + x2]
-        - integral[y1 * integral_width + x2]
-        - integral[y2 * integral_width + x1]
-        + integral[y1 * integral_width + x1];
+            - integral[y1 * integral_width + x2]
+            - integral[y2 * integral_width + x1]
+            + integral[y1 * integral_width + x1];
 \end{lstlisting}
 }
 

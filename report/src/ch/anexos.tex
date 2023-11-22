@@ -1,0 +1,89 @@
+\chapter{Anexos}
+\label{ch:anexos}
+
+\scriptsize
+
+\section{ImageBlur: Primeira Abordagem}
+\label{sec:anexos/blur1}
+
+\begin{lstlisting}[language=C]
+void ImageBlur(Image img, int dx, int dy) {
+    assert(img != NULL);
+    assert(dx >= 0 && dy >= 0);
+
+    if (dx == 0 && dy == 0) return;
+
+    Image img_new = ImageCreate(img->width, img->height, img->maxval);
+    if (img_new == NULL) return;
+
+    for (int x = 0; x < img->width; x++) {
+        for (int y = 0; y < img->height; y++) {
+            int sum = 0;
+            int count = 0;
+
+            for (int ix = x - dx; ix <= x + dx; ix++) {
+                for (int iy = y - dy; iy <= y + dy; iy++) {
+                    if (!ImageValidPos(img, ix, iy)) continue;
+                    sum += ImageGetPixel(img, ix, iy);
+                    count++;
+                }
+            }
+
+            ImageSetPixel(img_new, x, y, (sum + count / 2) / count);
+        }
+    }
+
+    uint8 *tmp = img->pixel;
+    img->pixel = img_new->pixel;
+    img_new->pixel = tmp;
+
+    ImageDestroy(&img_new);
+}
+\end{lstlisting}
+
+\pagebreak
+
+\section{ImageBlur: Segunda Abordagem}
+\label{sec:anexos/blur2}
+
+\begin{lstlisting}[language=C]
+void ImageBlur(Image img, int dx, int dy) {
+    assert(img != NULL);
+    assert(dx >= 0 && dy >= 0);
+
+    if (dx == 0 && dy == 0) return;
+
+    int integral_width = img->width + 1;
+    int integral_height = img->height + 1;
+    int* integral = (int*)calloc(integral_width * integral_height, sizeof(int));
+    for (int y = 1; y < integral_height; y++) {
+        for (int x = 1; x < integral_width; x++) {
+            integral[y * integral_width + x] = ImageGetPixel(img, x - 1, y - 1)   
+                + integral[(y - 1) * integral_width + x]                          
+                + integral[y * integral_width + (x - 1)]                          
+                - integral[(y - 1) * integral_width + (x - 1)];                   
+        }
+    }
+
+    for (int y = 0; y < img->height; y++) {
+        for (int x = 0; x < img->width; x++) {
+            int x1 = x - dx < 1 ? 1 : x - dx;
+            int y1 = y - dy < 1 ? 1 : y - dy;
+
+            int x2 = x + dx + 1 > integral_width - 1 ? integral_width - 1 : x + dx + 1;
+            int y2 = y + dy + 1 > integral_height - 1 ? integral_height - 1 : y + dy + 1;
+
+            int count = (x2 - x1) * (y2 - y1);
+
+            int sum = integral[y2 * integral_width + x2]
+                - integral[y1 * integral_width + x2]
+                - integral[y2 * integral_width + x1]
+                + integral[y1 * integral_width + x1];
+
+            ImageSetPixel(img, x, y, (sum + count / 2) / count);
+        }
+    }
+
+    free(integral);
+}
+\end{lstlisting}
