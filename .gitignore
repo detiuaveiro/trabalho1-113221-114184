@@ -5,6 +5,11 @@ test/
 imageTest
 imageTool
 
+# MatPlotLib
+plot/.venv/
+plot/*.png
+plot/*data.txt
+
 # Prerequisites
 *.d
 

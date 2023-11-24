@@ -19,10 +19,10 @@ O código completo deste algoritmo pode ser visto no anexo \ref{sec:anexos/blur1
 \textbf{Complexidade Temporal}
 
 \begin{enumerate}
-    \item \textbf{Desfocagem:} Esta parte da função itera sobre todas as linhas ($img$$\rightarrow$$height$) e para cada linha itera sobre todos os pixeis da linha ($img$$\rightarrow$$width$). Para cada pixel, itera sobre todas as linhas ($2 * dy + 1$) e para cada linha itera sobre todos os pixeis da linha ($2 * dx + 1$). Assim, a complexidade temporal desta parte é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$.
+    \item \textbf{Desfocagem:} Esta parte da função itera sobre todas as linhas ($img$$\rightarrow$$height$) e para cada linha itera sobre todos os pixeis da linha ($img$$\rightarrow$$width$). Para cada pixel, itera sobre todas as linhas ($2 * dy + 1$) e para cada linha itera sobre todos os pixeis da linha ($2 * dx + 1$). Assim, a complexidade temporal desta parte é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$ ou $O(A_{img}*A_{rect})$.
 \end{enumerate}
 
-        Assim, a complexidade temporal total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$ que significa que a complexidade temporal escala linearmente tanto em função da àrea da imagem quanto em função da área do retângulo de desfocagem (independentes uma da outra neste requisito).
+Assim, a complexidade temporal total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$ ou $O(A_{img}*A_{rect})$ que significa que a complexidade temporal escala linearmente tanto em função da àrea da imagem quanto em função da área do retângulo de desfocagem (independentes uma da outra).
 
 \item
 
@@ -61,7 +61,7 @@ O código completo deste algoritmo pode ser visto no anexo \ref{sec:anexos/blur2
     \item \textbf{Limpeza da Imagem Integral:} Esta parte da função tem sempre complexidade temporal constante, por isso a complexidade temporal desta parte é $O(1)$.
 \end{enumerate}
 
-Assim, a complexidade temporal total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$ + $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$ + $O(1)$ que simplifica para $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$. Isto significa que a complexidade temporal escala linearmente em função da área da imagem, com esta abordagem, a área do retângulo de desfocagem não irá alterar a complexidade do algoritmo.
+Assim, a complexidade temporal total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$ + $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$ + $O(1)$ que simplifica para $O(img$$\rightarrow$$height * img$$\rightarrow$$width)$ ou $O(A_{img})$. Isto significa que a complexidade temporal escala linearmente em função da área da imagem, com esta abordagem, a área do retângulo de desfocagem não irá alterar a complexidade do algoritmo.
 
 \item
 \textbf{Complexidade Espacial}
