@@ -7,5 +7,28 @@
 %%%
 % Conteúdo da introdução aqui
 
+Neste projeto será desenvolvida uma ferramenta de manipulação de imagens monocromáticas (apenas um canal de cor, neste caso apenas escala de cinzentos), que permitirá efetuar diversas operações:
+
+\begin{itemize}
+    \item \textbf{ImageStats:} Mostra os valores mínimo e máximo dos pixeis da imagem;
+    \item \textbf{ImageNegative:} Inverte os pixeis da imagem ($new\_value = max\_value - old\_value$);
+    \item \textbf{ImageThreshold:} Aplica um limiar à imagem, de forma a que os pixeis com valor inferior ao limiar sejam convertidos para 0 e os restantes para o valor máximo;
+    \item \textbf{ImageBrighten:} Aumenta ou diminui o brilho da imagem, multiplicando todos os pixeis por um fator ($fator~>~1$ aumenta o brilho, $fator~<~1$ diminui o brilho);
+    \item \textbf{ImageMirror:} Espelha a imagem, horizontalmente;
+    \item \textbf{ImageRotate:} Roda a imagem, 90º no sentido contrário ao dos ponteiros do relógio;
+    \item \textbf{ImageCrop:} Corta a imagem, de acordo com as coordenadas do canto superior esquerdo e o tamanho do retângulo a cortar;
+    \item \textbf{ImagePaste:} Cola uma imagem sobre outra a partir das coordenadas do canto superior esquerdo;
+    \item \textbf{ImageBlend:} Cola uma imagem sobre outra, com um fator de transparência (entre 0 e 1), a partir das coordenadas do canto superior esquerdo;
+    \item \textbf{ImageMatchSubImage:} Verifica se uma imagem está contida dentro de outra maior, a partir das coordenadas do canto superior esquerdo;
+    \item \textbf{ImageLocateSubImage:} Procura uma imagem dentro de outra maior e devolve as coordenadas do canto superior esquerdo da primeira ocorrência;
+    \item \textbf{ImageBlur:} Aplica um filtro de desfoque à imagem;
+\end{itemize}
+
+Tudo isto será desenvolvido usando a linguagem de programação C com recurso às bibliotecas stdio.h, stdlib.h, assert.h, ctype.h e errno.h.
+
+\vspace{0.5cm}
+
+Para as funções ImageLocateSubImage e ImageBlur será ainda feita a análise formal onde será apresentada a complexidade temporal e espacial de cada uma das funções. Para tal, será usada a notação O-grande, onde se considera apenas o termo de maior ordem. Será feita também uma análise experimental destas duas funções para verificar o resultado expectado pela análise formal. Por último, será descrito todo o algoritmo otimizado da função ImageBlur.
+
 %%%
 }
