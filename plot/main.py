@@ -62,11 +62,20 @@ def func(X, a, b, c):
     A, R = X
     return a * A * R + b * A + c * R
 
+# Define a function using only A
+def func2(X, a):
+    A = X
+    return a * A
+
 # Fit the function to the data
 popt, pcov = curve_fit(func, (A1, R1), T1)
 
+# Fit the function with only A to the data
+popt2, pcov2 = curve_fit(func2, A2, T2)
+
 # Print the function
 print(f"The function is: T = {popt[0]} * A * R + {popt[1]} * A + {popt[2]} * R")
+print(f"The function is: T = {popt2[0]} * A")
 
 # Create a 3D plot
 fig = plt.figure()

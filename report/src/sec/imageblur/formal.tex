@@ -19,10 +19,10 @@ O código completo deste algoritmo pode ser visto no anexo \ref{sec:anexos/blur1
 \textbf{Complexidade Temporal}
 
 \begin{enumerate}
-    \item \textbf{Desfocagem:} Esta parte da função itera sobre todas as linhas ($img$$\rightarrow$$height$) e para cada linha itera sobre todos os pixeis da linha ($img$$\rightarrow$$width$). Para cada pixel, itera sobre todas as linhas ($2 * dy + 1$) e para cada linha itera sobre todos os pixeis da linha ($2 * dx + 1$). Assim, a complexidade temporal desta parte é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$ ou $O(A_{img}*A_{rect})$.
+    \item \textbf{Desfocagem:} Esta parte da função itera sobre todas as linhas ($img$$\rightarrow$$height$) e para cada linha itera sobre todos os pixeis da linha ($img$$\rightarrow$$width$). Para cada pixel, itera sobre todas as linhas ($2 * dy + 1$) e para cada linha itera sobre todos os pixeis da linha ($2 * dx + 1$). Assim, a complexidade temporal desta parte é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$ ou $O(A_{img}*A_{blur})$.
 \end{enumerate}
 
-Assim, a complexidade temporal total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$ ou $O(A_{img}*A_{rect})$ que significa que a complexidade temporal escala linearmente tanto em função da àrea da imagem quanto em função da área do retângulo de desfocagem (independentes uma da outra).
+Assim, a complexidade temporal total da função é $O(img$$\rightarrow$$height * img$$\rightarrow$$width * (2 * dy + 1) * (2 * dx + 1))$ ou $O(A_{img}*A_{blur})$ que significa que a complexidade temporal escala linearmente tanto em função da àrea da imagem quanto em função da área do retângulo de desfocagem (independentes uma da outra).
 
 \item
 

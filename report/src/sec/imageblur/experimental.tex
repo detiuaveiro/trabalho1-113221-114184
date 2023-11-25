@@ -1,7 +1,13 @@
 \section{Análise experimental}
 \label{sec:imageblur/experimental}
 
-Os gráficos seguintes foram gerados usando a biblioteca \textit{matplotlib} do \textit{python}. Para gerar os gráficos foram primeiro gerados ficheiros com os dados obtidos através da biblioteca \textit{time} da linguagem C. Depois foram gerados os gráficos a partir desses ficheiros. Para cada gráfico foram usados 12100 resultados.
+Os gráficos seguintes foram gerados usando a biblioteca \textit{matplotlib} do \textit{python}. Para gerar os gráficos foram primeiro gerados ficheiros com os dados obtidos através da biblioteca \textit{time} da linguagem C. Depois foram gerados os gráficos a partir desses ficheiros. Para cada gráfico foram usados 12100 resultados. Foi usado um computador com as seguintes especificações:
+
+\begin{itemize}
+    \item \textbf{CPU:} Intel Core i7-1165G7 (8) @ 4.7GHz
+    \item \textbf{GPU:} Intel TigerLake-LP GT2 [Iris Xe Graphics]
+    \item \textbf{RAM:} 16GB
+\end{itemize}
 
 \subsection{Primeira abordagem}
 
@@ -14,6 +20,13 @@ Os gráficos seguintes foram gerados usando a biblioteca \textit{matplotlib} do 
 
 Como podemos ver na figura \ref{fig:imageblur/first-3d_plot}, o tempo de execução da primeira abordagem é linear em função do tamanho da imagem e linear em função da área de desfocagem o que implica que o total seja exponencial em função de ambos. Isto para valores pequenos pode não se notar muito mas à medida que queremos trabalhar com imagems maiores ou filtros maiores, este algoritmo torna-se inviável.
 
+A equação que descreve o tempo de execução deste algoritmo é a seguinte:
+
+\begin{equation}
+    \label{eq:imageblur/first-time}
+    T(A_{img}, A_{blur}) = 2.403 \cdot 10^{-9} \cdot A_{img} \cdot A_{blur} + 9.011 \cdot 10^{-8} \cdot A_{img} - 1.05 \cdot 10^{-7} \cdot A_{blur}
+\end{equation}
+
 \subsection{Segunda abordagem}
 
 \begin{figure}[H]
@@ -24,6 +37,13 @@ Como podemos ver na figura \ref{fig:imageblur/first-3d_plot}, o tempo de execuç
 \end{figure}
 
 Como podemos ver na figura \ref{fig:imageblur/second-3d_plot}, o tempo de execução da segunda abordagem é linear em função do tamanho da imagem. Podemos também ver que a área de desfocagem não tem influência no tempo de execução. Isto permite conseguir trabalhar com imagens maiores sem ter problemas com ineficiência do programa bem como usar qualquer tamanho de filtro sem alterar de forma alguma o desempenho do programa.
+
+A equação que descreve o tempo de execução deste algoritmo é a seguinte:
+
+\begin{equation}
+    \label{eq:imageblur/second-time}
+    T(A_{img}) = 8.296 \cdot 10^{-9} \cdot A_{img}
+\end{equation}
 
 \subsection{Comparação}
 
