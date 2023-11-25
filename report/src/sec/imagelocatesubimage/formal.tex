@@ -1,0 +1,22 @@
+\section{Análise formal}
+\label{sec:imagelocatesubimage/formal}
+
+\subsection{Descrição do algoritmo}
+
+A função ImageLocateSubImage compara uma imagem (img2) com uma imagem maior (img1). Após as verificações iniciais, percorre-se cada pixel da imagem, comparando-o com o da subimagem. Se for detetado um pixel igual, chama-se a função ImageMatchSubImage para verificar se a subimagem está presente na imagem maior. No caso de encontrar um pixel que não corresponda, a função continua até encontrar, ou até acabar a imagem. Caso a ImageMatchSubImage devolva verdadeiro, a função devolve verdadeiro.
+
+\subsection{Análise de complexidade}
+
+\begin{itemize}
+    
+\item
+\textbf{Complexidade Temporal}
+
+Sabemos que ImageMatchSubImage, presente dentro do loop interior, é uma operação $O(p*o)$, e que se percorre a imagem linha a linha e coluna a coluna, logo é possível afirmar que a complexidade temporal do algoritmo é $O((n*m)*(p*o))$, onde n e m são a altura e largura de img2 e p e o são a altura e largura da subimagem verificada dentro do loop, respetivamente.
+
+\item
+\textbf{Complexidade Espacial}
+
+A complexidade espacial do algoritmo é $O(1)$, dado que não são usadas estruturas de dados adicionais que cresçam com o tamanho da entrada. As variáveis row e col são as únicas variáveis adicionais, e ocupam um espaço constante.
+
+\end{itemize}

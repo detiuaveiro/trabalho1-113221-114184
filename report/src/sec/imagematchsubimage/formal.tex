@@ -1,0 +1,22 @@
+\section{Análise formal}
+\label{sec:imagematchsubimage/formal}
+
+\subsection{Descrição do algoritmo}
+
+A função ImageMatchSubImage compara uma imagem (img2) com uma subimagem de uma imagem maior (img1). A subimagem é definida pela posição inicial (x, y) na imagem maior. Após as verificações iniciais, percorre-se cada pixel da imagem, a partir da posição inicial, comparando-o com o da subimagem. No caso de encontrar um pixel que não corresponda, a função devolve falso. Se todos os pixeis corresponderem, a função devolve verdadeiro.
+
+\subsection{Análise de complexidade}
+
+\begin{itemize}
+    
+\item
+\textbf{Complexidade Temporal}
+
+Após verificarmos que a obtenção de pixeis, presente dentro do loop interior, é uma operação $O(1)$, e que se percorre a imagem linha a linha e coluna a coluna, podemos afirmar que a complexidade temporal do algoritmo é $O(n*m)$, onde n e m são a altura e largura de img2, respetivamente.
+
+\item
+\textbf{Complexidade Espacial}
+
+A complexidade espacial do algoritmo é $O(1)$, dado que não são usadas estruturas de dados adicionais que cresçam com o tamanho da entrada. As variáveis row e col são as únicas variáveis adicionais, e ocupam um espaço constante.
+
+\end{itemize}
