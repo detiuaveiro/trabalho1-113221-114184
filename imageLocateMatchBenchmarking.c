@@ -43,7 +43,7 @@ void runTests() {
         double time_taken_worst = ((double)end - start) / CLOCKS_PER_SEC;
         printf("%f\n", time_taken_worst);
 
-        fprintf(file, "%d00%%,%f,%f,%f\n", i, time_taken_best, time_taken_worst);
+        fprintf(file, "%d00%%,%f,%f\n", i, time_taken_best, time_taken_worst);
     }
 }
 
