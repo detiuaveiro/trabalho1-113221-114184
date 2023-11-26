@@ -1,11 +1,12 @@
-\section{Análise formal}
 \label{sec:imagematchsubimage/formal}
 
-\subsection{Descrição do algoritmo}
+\subsection{ImageMatchSubImage}
 
-A função ImageMatchSubImage compara uma imagem (img2) com uma subimagem de uma imagem maior (img1). A subimagem é definida pela posição inicial (x, y) na imagem maior. Após as verificações iniciais, percorre-se cada pixel da imagem, a partir da posição inicial, comparando-o com o da subimagem. No caso de encontrar um pixel que não corresponda, a função devolve falso. Se todos os pixeis corresponderem, a função devolve verdadeiro.
+\subsubsection{Descrição do algoritmo}
 
-\subsection{Análise de complexidade}
+É importante analisar a função ImageMatchSubImage, que é chamada dentro do loop interior da função ImageLocateSubImage. Esta função compara uma imagem (img2) com uma subimagem de uma imagem maior (img1). A subimagem é definida pela posição inicial (x, y) na imagem maior. Após as verificações iniciais, percorre-se cada pixel da imagem, a partir da posição inicial, comparando-o com o da subimagem. No caso de encontrar um pixel que não corresponda, a função devolve falso. Se todos os pixeis corresponderem, a função devolve verdadeiro.
+
+\subsubsection{Análise de complexidade}
 
 \begin{itemize}
     

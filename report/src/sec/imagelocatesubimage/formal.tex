@@ -1,11 +1,15 @@
 \section{Análise formal}
 \label{sec:imagelocatesubimage/formal}
 
-\subsection{Descrição do algoritmo}
+\input{sec/imagematchsubimage/formal.tex}
+
+\subsection{ImageLocateSubImage}
+
+\subsubsection{Descrição do algoritmo}
 
 A função ImageLocateSubImage compara uma imagem (img2) com uma imagem maior (img1). Após as verificações iniciais, percorre-se cada pixel da imagem, comparando-o com o da subimagem. Se for detetado um pixel igual, chama-se a função ImageMatchSubImage para verificar se a subimagem está presente na imagem maior. No caso de encontrar um pixel que não corresponda, a função continua até encontrar, ou até acabar a imagem. Caso a ImageMatchSubImage devolva verdadeiro, a função devolve verdadeiro.
 
-\subsection{Análise de complexidade}
+\subsubsection{Análise de complexidade}
 
 \begin{itemize}
     
