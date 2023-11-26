@@ -27,21 +27,17 @@ void runTests() {
 
         int x, y;
 
-        printf("[%d00%%]\n", i);
-
         // Best case scenario
         clock_t start = clock();
         int result = ImageLocateSubImage(image, &x, &y, subimage);
         clock_t end = clock();
         double time_taken_best = ((double)end - start) / CLOCKS_PER_SEC;
-        printf("%f\n", time_taken_best);
 
         // Worst case scenario
         start = clock();
         result = ImageLocateSubImage(image, &x, &y, not_subimage);
         end = clock();
         double time_taken_worst = ((double)end - start) / CLOCKS_PER_SEC;
-        printf("%f\n", time_taken_worst);
 
         fprintf(file, "%d00%%,%f,%f\n", i, time_taken_best, time_taken_worst);
     }
