@@ -4,6 +4,6 @@ for ((n=1; n<=20; n++)); do
     mkdir $n
     
     convert -resize ${n}00% image.pgm ${n}/image.pgm
-    convert -resize ${n}00% subimage.pgm ${n}/subimage.pgm
+    convert image.pgm -crop 50x50+0+0 ${n}/subimage.pgm
     convert -resize ${n}00% subimage.pgm -negate ${n}/not_subimage.pgm
 done
